@@ -8,6 +8,11 @@ var app = {
   options: []
 };
 
+var onRemoveOne = function onRemoveOne() {
+  console.log('remove this one!');
+  render();
+};
+
 var onFormSubmit = function onFormSubmit(e) {
   e.preventDefault();
   var option = e.target.elements.option.value;
@@ -21,6 +26,12 @@ var onFormSubmit = function onFormSubmit(e) {
 var onRemoveAll = function onRemoveAll() {
   app.options = [];
   render();
+};
+
+var onMakeDecision = function onMakeDecision() {
+  var randomNum = Math.floor(Math.random() * app.options.length);
+  var option = app.options[randomNum];
+  alert(option);
 };
 
 var render = function render() {
@@ -42,29 +53,31 @@ var render = function render() {
       null,
       app.options.length > 0 ? "Here are your options" : "No options"
     ),
-    React.createElement(
-      'p',
-      null,
-      app.options.length
-    ),
-    React.createElement(
+    app.options.length > 0 && React.createElement(
       'button',
-      { onClick: onRemoveAll },
-      'Remove All'
+      { onClick: onMakeDecision },
+      'If you die, you die.'
     ),
     React.createElement(
       'ol',
       null,
-      React.createElement(
-        'li',
-        null,
-        'Item one'
-      ),
-      React.createElement(
-        'li',
-        null,
-        'Item two'
-      )
+      app.options.map(function (opt) {
+        return React.createElement(
+          'div',
+          { key: opt },
+          React.createElement(
+            'li',
+            null,
+            opt,
+            ' ',
+            React.createElement(
+              'button',
+              { onClick: onRemoveOne },
+              'Remove'
+            )
+          )
+        );
+      })
     ),
     React.createElement(
       'form',
@@ -75,6 +88,11 @@ var render = function render() {
         null,
         'Add Option'
       )
+    ),
+    React.createElement(
+      'button',
+      { onClick: onRemoveAll },
+      'Remove All'
     )
   );
   ReactDOM.render(template, appRoot);
