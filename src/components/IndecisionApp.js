@@ -5,15 +5,29 @@ import Header from './Header';
 import Options from './Options';
 
 class IndecisionApp extends React.Component {
-  constructor(props) {
-    super(props);
-    this.removeAll = this.removeAll.bind(this);
-    this.removeSingle = this.removeSingle.bind(this);
-    this.handleDecision = this.handleDecision.bind(this);
-    this.handleAddOption = this.handleAddOption.bind(this);
-    this.state = {
-      options: []
+  state = {
+    options: []
+  }
+  removeAll = () => {
+    this.setState(() => ({ options: [] }));
+  }
+  removeSingle = (optionToRemove) => {
+    this.setState((prevState) => ({
+      options: prevState.options.filter((option) => optionToRemove !== option)
+    }));
+  }
+  handleDecision = () => {
+    const randomNum = Math.floor(Math.random() * this.state.options.length);
+    const option = this.state.options[randomNum];
+    alert(option);
+  }
+  handleAddOption = (option) => {
+    if (!option) {
+      return 'Enter valid value to add option';
+    } else if (this.state.options.indexOf(option) > -1) {
+      return 'This options already exists';
     }
+    this.setState((prevState) => ({ options: prevState.options.concat(option) }));
   }
   componentDidMount() {
     try {
@@ -35,28 +49,6 @@ class IndecisionApp extends React.Component {
   }
   componentWillUnmount() {
     console.log('componentWillUnmount');
-  }
-  removeAll() {
-    this.setState(() => ({ options: [] }));
-  }
-  removeSingle(optionToRemove) {
-    this.setState((prevState) => ({
-      options: prevState.options.filter((option) => optionToRemove !== option)
-    }));
-  }
-  handleDecision() {
-    const randomNum = Math.floor(Math.random() * this.state.options.length);
-    const option = this.state.options[randomNum];
-    alert(option);
-  }
-  handleAddOption(option) {
-    if (!option) {
-      return 'Enter valid value to add option';
-    } else if (this.state.options.indexOf(option) > -1) {
-      return 'This options already exists';
-    }
-
-    this.setState((prevState) => ({ options: prevState.options.concat(option) }));
   }
   render() {
     const subtitle = 'I will choose your fate';
